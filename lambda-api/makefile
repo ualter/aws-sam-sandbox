@@ -71,17 +71,33 @@ print-stack: ## List Stack Outputs (deployed)
 
 print-apiurl: ## Print API Gateway URL of the deployed Lambda (needs jq installed)
 	@echo ""; \
-	printf "${BLUE}Launching... ${GREEN}sam list stack-outputs --output json | jq -r '.[1].OutputValue' ${RESET}\n"; \
-	api_values=$$(sam list stack-outputs --output json | jq -r '.[1] | "\(.OutputKey), \(.OutputValue)"'); \
+	printf "${BLUE}Launching... ${GREEN}sam list stack-outputs --output json | jq -r '.[N].OutputValue' ${RESET}\n"; \
+	api_values=$$(sam list stack-outputs --output json | jq -r '.[2] | "\(.OutputKey), \(.OutputValue)"'); \
 	IFS=', ' read -r -a array <<< "$$api_values"; \
 	api_key=$${array[0]}; \
 	api_url=$${array[1]}; \
 	printf "\n$$api_key: ${BLUE}\n   $$api_url"; \
+	api_values=$$(sam list stack-outputs --output json | jq -r '.[3] | "\(.OutputKey), \(.OutputValue)"'); \
+	IFS=', ' read -r -a array <<< "$$api_values"; \
+	api_key=$${array[0]}; \
+	api_url=$${array[1]}; \
+	printf "\n${RESET}$$api_key: ${BLUE}\n   $$api_url"; \
 	echo ""
 
-call-apiurl: ## Call API Gateway URL of the deployed Lambda (needs jq installed)
+call-hello: ## Call Hello World API Gateway URL of the deployed Lambda (needs jq installed)
 	@echo ""; \
-	api_values=$$(sam list stack-outputs --output json | jq -r '.[1] | "\(.OutputKey), \(.OutputValue)"'); \
+	api_values=$$(sam list stack-outputs --output json | jq -r '.[2] | "\(.OutputKey), \(.OutputValue)"'); \
+	IFS=', ' read -r -a array <<< "$$api_values"; \
+	api_key=$${array[0]}; \
+	api_url=$${array[1]}; \
+	printf "Calling... ${BLUE}\n   $$api_url \n\n${RESET}"; \
+	printf "Result... ${BLUE}\n   "; \
+	curl $$api_url; \
+	echo ""
+
+call-qr: ## Call QRCode API Gateway URL of the deployed Lambda (needs jq installed)
+	@echo ""; \
+	api_values=$$(sam list stack-outputs --output json | jq -r '.[3] | "\(.OutputKey), \(.OutputValue)"'); \
 	IFS=', ' read -r -a array <<< "$$api_values"; \
 	api_key=$${array[0]}; \
 	api_url=$${array[1]}; \

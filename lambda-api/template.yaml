@@ -14,8 +14,8 @@ Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
+      CodeUri: lambda_app/
+      Handler: app.handler_hello
       Runtime: python3.10
       Architectures:
         - x86_64
@@ -25,11 +25,27 @@ Resources:
           Properties:
             Path: /hello
             Method: get
+  
+  QrcodeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda_app/
+      Handler: app.handler_qrcode
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /qr
+            Method: get
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+
   HelloWorldApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
@@ -39,3 +55,14 @@ Outputs:
   HelloWorldFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt HelloWorldFunctionRole.Arn
+  
+  QrcodeApi:
+    Description: "API Gateway endpoint URL for Prod stage for Qrcode function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/qr/"
+  QrcodeFunction:
+    Description: "Qr Lambda Function ARN"
+    Value: !GetAtt QrcodeFunction.Arn
+  QrcodeFunctionIamRole:
+    Description: "Implicit IAM Role created for Qr function"
+    Value: !GetAtt QrcodeFunctionRole.Arn
+  
