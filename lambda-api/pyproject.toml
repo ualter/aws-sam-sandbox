@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "lambda-api"
+version = "0.1.0"
+description = "lambda-api sam aws"
+authors = ["Ualter Otoni <ualter.junior@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.31.0"
+aws-wsgi = "^0.2.7"
+flask = "^3.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
