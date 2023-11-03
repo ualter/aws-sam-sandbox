@@ -35,8 +35,8 @@ validate: ## Validate SAM Template
 
 local-invoke: ## SAM Local Invoke
 	@echo ""; \
-	printf "${BLUE}Launching... ${GREEN}sam local invoke ${RESET}\n"; \
-	sam local invoke; \
+	printf "${BLUE}Launching... ${GREEN}sam local invoke HelloWorldFunction${RESET}\n"; \
+	sam local invoke HelloWorldFunction; \
 	echo ""
 
 sync-stack: ## Synchronizing a development stack
