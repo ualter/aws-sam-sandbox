@@ -17,6 +17,9 @@ Resources:
       CodeUri: lambda_app/
       Handler: app.handler_hello
       Runtime: python3.10
+      AutoPublishAlias: live
+      DeploymentPreference:
+        Type: Linear10PercentEvery1Minute
       Architectures:
         - x86_64
       Events:
